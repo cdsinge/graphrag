@@ -36,7 +36,7 @@ dependencies = [
     # Vector Stores
     "azure-search-documents>=11.5.2",
     "lancedb>=0.17.0",
-    "qdrant-client==1.10.0",
+    "qdrant-client==1.10.1",
     # Async IO
     "aiofiles>=24.1.0",
     # LLM
