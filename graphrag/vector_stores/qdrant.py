@@ -27,11 +27,19 @@ class QdrantError(Exception):
 class QdrantVectorStore(BaseVectorStore):
     """The Qdrant vector storage implementation."""
 
+    collection_name: str | None = None
+
     def connect(self, **kwargs: Any) -> Any:
         """Connect to the vector storage."""
-        if self.collection_name is None:
+        collection_name = kwargs.pop("collection_name", None) or self.kwargs.get(
+            "collection_name"
+        )
+        if collection_name is None:
+            collection_name = self.index_name
+        if collection_name is None:
             msg = "collection_name not set"
             raise ValueError(msg)
+        self.collection_name = collection_name
 
         self._default_vector_size = kwargs.pop(
             "default_vector_size", DEFAULT_VECTOR_SIZE
@@ -42,6 +50,10 @@ class QdrantVectorStore(BaseVectorStore):
         self._metadata_payload_key = kwargs.pop(
             "metadata_payload_key", METDATA_PAYLOAD_KEY
         )
+        kwargs.pop("type", None)
+        kwargs.pop("container_name", None)
+        kwargs.pop("embeddings_schema", None)
+        kwargs.pop("overwrite", None)
 
         self.db_connection = QdrantClient(**kwargs)
 
