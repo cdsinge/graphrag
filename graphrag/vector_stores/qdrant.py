@@ -51,6 +51,9 @@ class QdrantVectorStore(BaseVectorStore):
         )
         kwargs.pop("type", None)
         kwargs.pop("container_name", None)
+        kwargs.pop("audience", None)
+        kwargs.pop("database_name", None)
+        kwargs.pop("db_uri", None)
         kwargs.pop("embeddings_schema", None)
         kwargs.pop("overwrite", None)
 
