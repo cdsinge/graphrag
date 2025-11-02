@@ -88,6 +88,7 @@ class QdrantVectorStore(BaseVectorStore):
                     distance=models.Distance.COSINE,
                     **self._vector_params,
                 ),
+                point_id_type=models.PointIdType.STRING,
                 **self._collection_config,
             )
 
