@@ -7,10 +7,9 @@ from typing import Any
 
 from qdrant_client import QdrantClient, models
 
-from graphrag.model.types import TextEmbedder
-
-from .base import (
-    DEFAULT_VECTOR_SIZE,
+from graphrag.config.models.vector_store_schema_config import DEFAULT_VECTOR_SIZE
+from graphrag.data_model.types import TextEmbedder
+from graphrag.vector_stores.base import (
     BaseVectorStore,
     VectorStoreDocument,
     VectorStoreSearchResult,
