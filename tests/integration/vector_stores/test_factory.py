@@ -14,6 +14,7 @@ from graphrag.vector_stores.base import BaseVectorStore
 from graphrag.vector_stores.cosmosdb import CosmosDBVectorStore
 from graphrag.vector_stores.factory import VectorStoreFactory
 from graphrag.vector_stores.lancedb import LanceDBVectorStore
+from graphrag.vector_stores.qdrant import QdrantVectorStore
 
 
 def test_create_lancedb_vector_store():
@@ -65,6 +66,16 @@ def test_create_cosmosdb_vector_store():
     assert isinstance(vector_store, CosmosDBVectorStore)
 
 
+def test_create_qdrant_vector_store():
+    vector_store = VectorStoreFactory.create_vector_store(
+        vector_store_type=VectorStoreType.Qdrant.value,
+        vector_store_schema_config=VectorStoreSchemaConfig(
+            index_name="test_collection"
+        ),
+    )
+    assert isinstance(vector_store, QdrantVectorStore)
+
+
 def test_register_and_create_custom_vector_store():
     """Test registering and creating a custom vector store type."""
     from unittest.mock import MagicMock
@@ -100,6 +111,7 @@ def test_get_vector_store_types():
     assert VectorStoreType.LanceDB.value in vector_store_types
     assert VectorStoreType.AzureAISearch.value in vector_store_types
     assert VectorStoreType.CosmosDB.value in vector_store_types
+    assert VectorStoreType.Qdrant.value in vector_store_types
 
 
 def test_create_unknown_vector_store():
@@ -115,6 +127,7 @@ def test_is_supported_type():
     assert VectorStoreFactory.is_supported_type(VectorStoreType.LanceDB.value)
     assert VectorStoreFactory.is_supported_type(VectorStoreType.AzureAISearch.value)
     assert VectorStoreFactory.is_supported_type(VectorStoreType.CosmosDB.value)
+    assert VectorStoreFactory.is_supported_type(VectorStoreType.Qdrant.value)
 
     # Test unknown type
     assert not VectorStoreFactory.is_supported_type("unknown")

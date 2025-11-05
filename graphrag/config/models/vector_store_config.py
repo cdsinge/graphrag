@@ -3,7 +3,7 @@
 
 """Parameterization settings for the default configuration."""
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from graphrag.config.defaults import vector_store_defaults
 from graphrag.config.embeddings import all_embeddings
@@ -13,6 +13,8 @@ from graphrag.config.models.vector_store_schema_config import VectorStoreSchemaC
 
 class VectorStoreConfig(BaseModel):
     """The default configuration section for Vector Store."""
+
+    model_config = ConfigDict(extra="allow")
 
     type: str = Field(
         description="The vector store type to use.",
@@ -70,6 +72,31 @@ class VectorStoreConfig(BaseModel):
     audience: str | None = Field(
         description="The database audience when type == azure_ai_search.",
         default=vector_store_defaults.audience,
+    )
+
+    host: str | None = Field(
+        description="The host to use when type == qdrant.",
+        default=None,
+    )
+
+    port: int | None = Field(
+        description="The HTTP port to use when type == qdrant.",
+        default=None,
+    )
+
+    grpc_port: int | None = Field(
+        description="The gRPC port to use when type == qdrant.",
+        default=None,
+    )
+
+    prefer_grpc: bool | None = Field(
+        description="Prefer gRPC connections when type == qdrant.",
+        default=None,
+    )
+
+    collection_name: str | None = Field(
+        description="Optional explicit collection name when type == qdrant.",
+        default=None,
     )
 
     container_name: str = Field(

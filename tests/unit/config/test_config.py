@@ -10,7 +10,7 @@ from pydantic import ValidationError
 
 import graphrag.config.defaults as defs
 from graphrag.config.create_graphrag_config import create_graphrag_config
-from graphrag.config.enums import AuthType, ModelType
+from graphrag.config.enums import AuthType, ModelType, VectorStoreType
 from graphrag.config.load_config import load_config
 from tests.unit.config.utils import (
     DEFAULT_EMBEDDING_MODEL_CONFIG,
@@ -168,3 +168,27 @@ def test_load_config_missing_env_vars() -> None:
     root_dir = (cwd / "fixtures" / "minimal_config_missing_env_var").resolve()
     with pytest.raises(KeyError):
         load_config(root_dir=root_dir)
+
+
+def test_qdrant_vector_store_config_preserves_fields() -> None:
+    config = create_graphrag_config({
+        "models": DEFAULT_MODEL_CONFIG,
+        "vector_store": {
+            defs.DEFAULT_VECTOR_STORE_ID: {
+                "type": VectorStoreType.Qdrant.value,
+                "host": "qdrant",
+                "port": 6333,
+                "grpc_port": 6334,
+                "prefer_grpc": False,
+                "collection_name": "custom_collection",
+            }
+        },
+    })
+
+    vector_store = config.get_vector_store_config(defs.DEFAULT_VECTOR_STORE_ID)
+    assert vector_store.type == VectorStoreType.Qdrant.value
+    assert vector_store.host == "qdrant"
+    assert vector_store.port == 6333
+    assert vector_store.grpc_port == 6334
+    assert vector_store.prefer_grpc is False
+    assert vector_store.collection_name == "custom_collection"

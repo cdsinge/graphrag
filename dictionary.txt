@@ -82,6 +82,7 @@ spacy
 kwargs
 ollama
 litellm
+qdrant
 
 # Library Methods
 iterrows
